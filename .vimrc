@@ -199,15 +199,14 @@ call vundle#begin()
 " " All of your Plugins must be added before the following line
 "
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'tomasr/molokai'
-Plugin 'vim-scripts/phd'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'majutsushi/tagbar'
 Plugin 'scrooloose/nerdcommenter'
-"Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'scrooloose/nerdtree'
 Plugin 'fholgado/minibufexpl.vim'
+Plugin 'dyng/ctrlsf.vim'
+Plugin 'mileszs/ack.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
  
@@ -229,6 +228,8 @@ let g:ycm_key_list_select_completion = ['<Down>']
 "let g:ycm_key_list_previous_completion=['<c-p>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 "let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
+"直接触发自动补全
+"let g:ycm_key_invoke_completion=''
 
 let g:ycm_collect_identifiers_from_tags_files=1 " 开启 YCM 基于标签引擎
 let g:ycm_min_num_of_chars_for_completion=2 "
@@ -247,8 +248,10 @@ let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 "注释和字符串中的文字也会被收入补全
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
- "跳转到定义处
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"跳转到定义处
+nnoremap <leader>jc :YcmCompleter GoToDeclaration<CR>
+" 只能是 #include 或已打开的文件
+nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
 let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py' 
 
 "----------------------------------------------------
@@ -266,6 +269,7 @@ syntax on
 set expandtab
 %retab!
 set hlsearch
+
 " 设置快捷键将选中文本块复制至系统剪贴板
 vnoremap <Leader>y "+y
 " 设置快捷键将系统剪贴板内容粘贴至 vim
@@ -280,7 +284,7 @@ set ruler
 set number
 " 高亮显示当前行/列
 set cursorline
-"set cursorcolumn
+set cursorcolumn
 " 高亮显示搜索结果
 set hlsearch
 " 开启语法高亮功能
@@ -320,3 +324,58 @@ let NERDTreeShowHidden=1
 let NERDTreeMinimalUI=1
 " 删除文件时自动删除文件对应 buffer
 let NERDTreeAutoDeleteBuffer=1
+"显示行号
+let NERDTreeShowLineNumbers=1
+let NERDTreeAutoCenter=1
+" 显示书签列表
+let NERDTreeShowBookmarks=1
+"------------------------------------------------
+"nerdcommenter自动注释
+"<leader>cc注释<leader>cu解注释
+"------------------------------------------------
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+let g:NERDAltDelims_python = 1
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+"-------------------------------------------------
+"替换函数,函数说明
+"-------------------------------------------------
+" 替换函数。参数说明：
+" confirm：是否替换前逐一确认
+" wholeword：是否整词匹配
+" replace：被替换字符串
+"function! Replace(confirm,wholeword,replace)
+    "wa
+    "let flag = ''
+    "if a:confirm
+        "let flag .= 'gec'
+    "else
+        "let flag .= 'ge'
+    "endif
+    "let search = ''
+    "if a:wholeword
+        "let search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
+    "else
+        "let search .= expand('<cword>')
+    "endif
+    "let replace = escape(a:replace, '/\&~')
+    "execute 'argdo %s/' . search . '/' . replace . '/' . flag . '| update'
+"endfunction
+""绑定替换快捷键
+""------------------------------------------------
+"" 不确认、非整词
+"nnoremap <leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+"" 不确认、整词
+"nnoremap <leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+"" 确认、非整词
+"nnoremap <leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+"" 确认、整词
+"nnoremap <leader>rcw :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+"nnoremap <leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+
+"------------------------------------------------
+"快速查找
+"------------------------------------------------
+"nnoremap <Leader>sp :CtrlSF<CR>
+"let g:ctrlsf_ackprg = 'ack-grep'  
