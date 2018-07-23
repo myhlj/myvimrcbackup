@@ -252,6 +252,7 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1
 nnoremap <leader>jc :YcmCompleter GoToDeclaration<CR>
 " 只能是 #include 或已打开的文件
 nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+let g:ycm_server_python_interpreter='/usr/bin/python'
 let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py' 
 
 "----------------------------------------------------
@@ -271,9 +272,9 @@ set expandtab
 set hlsearch
 
 " 设置快捷键将选中文本块复制至系统剪贴板
-vnoremap <Leader>y "+y
+"vnoremap <leader>y "+y
 " 设置快捷键将系统剪贴板内容粘贴至 vim
-nmap <Leader>p "+p
+"nmap <leader>p "+p
 " 开启实时搜索功能
 set incsearch
 " 总是显示状态栏
@@ -313,8 +314,8 @@ nmap <F9> :NERDTreeToggle<CR>
 " 显示/隐藏 MiniBufExplorer 窗口
 map <F7> :MBEToggle<cr>
 " buffer 切换快捷键
-map <F3> :MBEbn<cr>
-map <F4> :MBEbp<cr>
+map <leader>n :MBEbn<cr>
+map <leader>k :MBEbp<cr>
 let NERDTreeWinSize=32
 " 设置NERDTree子窗口位置
 let NERDTreeWinPos="right"
@@ -345,37 +346,42 @@ let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
 " confirm：是否替换前逐一确认
 " wholeword：是否整词匹配
 " replace：被替换字符串
-"function! Replace(confirm,wholeword,replace)
-    "wa
-    "let flag = ''
-    "if a:confirm
-        "let flag .= 'gec'
-    "else
-        "let flag .= 'ge'
-    "endif
-    "let search = ''
-    "if a:wholeword
-        "let search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
-    "else
-        "let search .= expand('<cword>')
-    "endif
-    "let replace = escape(a:replace, '/\&~')
-    "execute 'argdo %s/' . search . '/' . replace . '/' . flag . '| update'
-"endfunction
-""绑定替换快捷键
-""------------------------------------------------
-"" 不确认、非整词
-"nnoremap <leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-"" 不确认、整词
-"nnoremap <leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-"" 确认、非整词
-"nnoremap <leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-"" 确认、整词
-"nnoremap <leader>rcw :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-"nnoremap <leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+function! Replace(confirm,wholeword,replace)
+wa
+let flag = ''
+if a:confirm
+    let flag .= 'gec'
+else
+    let flag .= 'ge'
+endif
+let search = ''
+if a:wholeword
+    let search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
+else
+    let search .= expand('<cword>')
+endif
+let replace = escape(a:replace, '/\&~')
+execute 'argdo %s/' . search . '/' . replace . '/' . flag . '| update'
+endfunction
+"绑定替换快捷键
+"------------------------------------------------
+" 不确认、非整词
+nnoremap <leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+" 不确认、整词
+nnoremap <leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+" 确认、非整词
+nnoremap <leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+" 确认、整词
+nnoremap <leader>rcw :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+nnoremap <leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
 
 "------------------------------------------------
 "快速查找
 "------------------------------------------------
 "nnoremap <Leader>sp :CtrlSF<CR>
 "let g:ctrlsf_ackprg = 'ack-grep'  
+"-----------------------------------------------
+"设置编码
+"-----------------------------------------------
+set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936
+
